@@ -54,6 +54,7 @@ public class survey extends Activity
     private final View[][] view_list = new View[8][2];
     private final Spinner[] spinner = new Spinner[8];
     private TextView comment;
+    private final String image_button_alt_text = "Retake Your Picture";
 
     /** Called when the activity is first created. */
     @Override
@@ -337,8 +338,8 @@ public class survey extends Activity
 
             // restart this view
             Toast.makeText(survey.this, "Survey successfully submitted!", Toast.LENGTH_LONG).show();
-            ctx.startActivity (new Intent(ctx, home.class));
-            //survey.this.finish();
+            //ctx.startActivity (new Intent(ctx, home.class));
+            survey.this.finish();
         }
     };
 
@@ -397,6 +398,19 @@ public class survey extends Activity
         switch(requestCode) {
         case ACTIVITY_CAPTURE_PHOTO:
             if (RESULT_CANCELED != resultCode) {
+                /* change picture button text to indicate the picture can be
+                 * retaken */
+                take_picture.setText (image_button_alt_text);
+
+                /* make sure to delete the old file before losing a reference
+                  * to it */
+                if (null != filename || !filename.toString().equals("")) {
+                  File file = new File (filename.toString());
+                  if (null != file) {
+                    file.delete();
+                  }
+                }
+
                 Bitmap image = (Bitmap) data.getExtras().get("data");
 
                 Date date = new Date();
